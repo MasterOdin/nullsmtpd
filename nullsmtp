@@ -8,7 +8,11 @@ import smtpd
 import sys
 import time
 
-logging.basicConfig(filename='nullsmtp.log', level=logging.INFO)
+if not os.path.isdir('/var/log/nullsmtp'):
+    os.mkdir('/var/log/nullsmtp')
+
+logging.basicConfig(filename='/var/log/nullsmtp/nullsmtp.log', level=logging.INFO)
+os.chmod('/var/log/nullsmtp/nullsmtp.log', 777)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 
