@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import argparse
+import asyncore
+import logging
+import os
+import smtpd
+import sys
+import time
+
+logging.basicConfig(filename='nullsmtp.log', level=logging.INFO)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+
+
+class NullSMTP(smtpd.SMTPServer):
+    def __init__(self, localaddr, mail_dir):
+        smtpd.SMTPServer.__init__(self, localaddr, None)
+        if not os.path.isdir(mail_dir):
+            try:
+                os.mkdir(mail_dir)
+            except IOError as io_error:
+                logging.error(str(io_error))
+                raise io_error
+        self.mail_dir = mail_dir
+        logging.info("Starting nullsmtp started on {:s}:{:d}".format(*localaddr))
+        logging.info("Mail Directory: {:s}".format(self.mail_dir))
+
+    def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
+        logging.info("Incoming mail from {:s}".format(mailfrom))
+        for recipient in rcpttos:
+            logging.info("Mail received for {:s}".format(recipient))
+            mail_file = "{}.{:f}".format(mailfrom, time.time())
+            mail_path = os.path.join(self.mail_dir, recipient, mail_file)
+            if not os.path.isdir(os.path.join(self.mail_dir, recipient)):
+                os.mkdir(os.path.join(self.mail_dir, recipient))
+            with open(mail_path, 'a') as open_file:
+                open_file.write(data + "\n")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("-H", "--host", type=str, default="localhost")
+    parser.add_argument("-P", "--port", type=int, default=25)
+    parser.add_argument("--mail-dir", type=str, default="/var/log/nullsmtp")
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    smtp_server = NullSMTP((args.host, args.port), args.mail_dir)
+    # noinspection PyBroadException
+    try:
+        asyncore.loop()
+    except:
+        logging.info("Stopping nullsmtp")
+        smtp_server.close()
+
+if __name__ == "__main__":
+    main()
