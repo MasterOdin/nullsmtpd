@@ -17,13 +17,13 @@ script:
   - cat /var/log/nullsmtp/nullsmtp.log
   - pylint_runner
   - "Hello World!
-Hello World!
+     Hello World!
 
-Regards,
-Example
-.
+     Regards,
+     Example
+     .
 
-" | mail -v matt@example.com
+     " | mail -v matt@example.com
   - ls -la /var/log/nullsmtp
 
 
