@@ -16,14 +16,7 @@ script:
   - python -c 'import os; os.path.isdir("/var/log/nullsmtp"); os.path.isfile("/var/log/nullsmtp/nullsmtp.log")'
   - cat /var/log/nullsmtp/nullsmtp.log
   - pylint_runner
-  - "Hello World!
-     Hello World!
-
-     Regards,
-     Example
-     .
-
-     " | mail -v matt@example.com
+  - python -c 'import os; os.system(\'"Hello World!\nHello World!\n\nRegards,\nExample\n.\n\n" | mail -v matt@example.com\')'
   - ls -la /var/log/nullsmtp
 
 
