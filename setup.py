@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-
+"""
+Setup file for nullsmtp
+"""
 from setuptools import setup
+from nullsmtp import __author__, __version__
 
 setup(name='nullsmtp',
-      version='0.1.1',
+      version=__version__,
       url='http://github.com/MasterOdin/nullsmtp',
       descriptoin='Fake SMTP server',
       long_description=open('README.rst').read(),
-      author='Matthew Peveler',
+      author=__author__,
       author_email='matt.peveler@gmail.com',
       classifiers=[
           'Development Status :: 5 - Production/Stable',
@@ -19,5 +22,9 @@ setup(name='nullsmtp',
           'License :: Public Domain',
           'Topic :: Communications :: Email :: Mail Transport Agents'
       ],
-      scripts=['nullsmtp']
-)
+      entry_points={
+          'console_scripts': [
+              'nullsmtp = nullsmtp:main',
+          ]
+      },
+     )

@@ -1,0 +1,38 @@
+dist: trusty
+language: python
+python:
+  - '3.3'
+  - '3.4'
+  - '3.5'
+  - '3.6'
+  - pypy
+
+install:
+  - pip install pylint_runner
+  - python setup.py install
+
+script:
+  - nohup sudo nullsmtp &
+  - python -c 'import os; os.path.isdir("/var/log/nullsmtp"); os.path.isfile("/var/log/nullsmtp/nullsmtp.log")'
+  - cat /var/log/nullsmtp/nullsmtp.log
+  - pylint_runner
+  - "Hello World!
+Hello World!
+
+Regards,
+Example
+.
+
+" | mail -v matt@example.com
+  - ls -la /var/log/nullsmtp
+
+
+deploy:
+  provider: pypi
+  user: "Master_Odin_Bot"
+  password:
+    secure: KeGS+9r5Fb1f5s4JbsIzEMG435SA8I1AnnVsPlV8plN+yAe53u56jfJiswPCgvzk/9tLoxrIMMkjR0hEXGOLcl8KJNSDyYEdgFYKJFGnVx0g21Xrip0/vnosHQDycJ5ceUPwYx5Hhdvt3I0EAbv4BzCLb/H7k1F4DFZujOqf/75faVRwOuj5RKPmDRlg3h0hq2Tbq/Own3ArXRbCLhnClWj2h7OTTtfxWXJeQvdo9hp4DCHOCXEKPA5NYQHEpJuyL9jXpO3bzBm6oqoepxy6l8jabRIPriyXINK9kgpIXQWNJCfViX4cH4Pe4lvaOtNYzxbYMzog+JxhY/1aPyevMH4e8U6RTGBncw4X5b82umclwAS9N+olvG4kGdHwzJs8Tchv6UZ1P49hhITXgsQHNI4jrIETxU40tQ2n//EwtDgeTHbA2FjsOGXN4OSG6UGscO1b21TF/ams4fG/+K+nfCUndZkOCAfK/pIw49JJLAQpGRXzv7+eotzJJTBFOIrHEmo3ME6QKkMI7CEZAaPdFN9hpEr8V8FSpRVmCM8h2iYZ7fskBuQCH/qOL/7xdEdlxsvt/6gDdCyhS30pRUl+BkO2i/JTrxGlbwp7pPEIYzyERr5KnrKfwnNKf6F59xV5UOx4wtYtgNwLvIWtT4znZmslgfPprGuVE5SIJD1X/FU=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: MasterOdin/nullsmtp
