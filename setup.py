@@ -22,6 +22,7 @@ setup(name='nullsmtp',
           'License :: Public Domain',
           'Topic :: Communications :: Email :: Mail Transport Agents'
       ],
+      packages=['nullsmtp'],
       entry_points={
           'console_scripts': [
               'nullsmtp = nullsmtp:main',

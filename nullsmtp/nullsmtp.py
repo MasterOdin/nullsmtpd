@@ -12,6 +12,8 @@ import smtpd
 import sys
 import time
 
+from nullsmtp import __version__
+
 LOGGER = logging.getLogger("nullsmtp")
 LOGGER.setLevel(logging.INFO)
 
