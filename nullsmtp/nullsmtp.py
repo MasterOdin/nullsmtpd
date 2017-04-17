@@ -12,13 +12,18 @@ import smtpd
 import sys
 import time
 
-from nullsmtp import __version__
+__author__ = 'Matthew Peveler'
+__version__ = '0.2.0'
+__license__ = 'Unlicense (Public Domain)'
 
 LOGGER = logging.getLogger("nullsmtp")
 LOGGER.setLevel(logging.INFO)
 
 
 class NullSMTP(smtpd.SMTPServer):
+    """
+    Fake SMTP server
+    """
     def __init__(self, localaddr, mail_dir):
         smtpd.SMTPServer.__init__(self, localaddr, None)
         if mail_dir is not None and not os.path.isdir(mail_dir):
@@ -26,7 +31,7 @@ class NullSMTP(smtpd.SMTPServer):
                 os.mkdir(mail_dir)
             except IOError as io_error:
                 logging.error(str(io_error))
-                raise io_error
+                raise
         self.mail_dir = mail_dir
         LOGGER.info("Starting nullsmtp started on {:s}:{:d}".format(*localaddr))
         if self.mail_dir is not None:
@@ -34,7 +39,17 @@ class NullSMTP(smtpd.SMTPServer):
         else:
             LOGGER.info("Mail Directory could not be created. Emails won't be written to file.")
 
-    def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
+    # pylint: disable=arguments-differ
+    def process_message(self, peer, mailfrom, rcpttos, data, **_):
+        """
+        Process incoming email messages
+
+        :param peer:
+        :param mailfrom:
+        :param rcpttos:
+        :param data:
+        :return:
+        """
         LOGGER.info("Incoming mail from {:s}".format(mailfrom))
         for recipient in rcpttos:
             LOGGER.info("Mail received for {:s}".format(recipient))
@@ -51,7 +66,7 @@ class NullSMTP(smtpd.SMTPServer):
 
 def _parse_args():
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument("--log-level", type=int, default=1, choices=[0,1,2],
+    parser.add_argument("--log-level", type=int, default=1, choices=[0, 1, 2],
                         help="Level of logging from 0 (nothing), 1 (just to file), "
                              "and 2 (to file and console). Defaults to 2.")
     parser.add_argument("-H", "--host", type=str, default="localhost", help="Host to listen on")
@@ -63,6 +78,10 @@ def _parse_args():
 
 
 def main():
+    """
+    Main process
+    :return:
+    """
     args = _parse_args()
     if not os.path.isdir(args.mail_dir):
         try:
@@ -86,6 +105,7 @@ def main():
 
     smtp_server = NullSMTP((args.host, args.port), args.mail_dir)
     # noinspection PyBroadException
+    # pylint: disable=bare-except
     try:
         asyncore.loop()
     except:
