@@ -1,3 +1,6 @@
+"""
+Logger module for NullSMTP
+"""
 import logging
 import os
 import sys
@@ -5,14 +8,15 @@ import sys
 LOGGER_NAME = 'nullsmtp'
 
 
+# pylint: disable=too-few-public-methods
 class InfoFilter(logging.Filter):
     """
     Filter for logging which only allows DEBUG and INFO to go through. We use this
     to allow us to best split the logging where WARN and above are on sys.stderr and
     INFO and below are on sys.stdout.
     """
-    def filter(self, rec):
-        return rec.levelno in (logging.DEBUG, logging.INFO)
+    def filter(self, record):
+        return record.levelno in (logging.DEBUG, logging.INFO)
 
 
 def configure_logging(mail_dir, console_logging=False):
@@ -52,4 +56,8 @@ def configure_logging(mail_dir, console_logging=False):
 
 
 def get_logger():
+    """
+    Shortcut method to get the logger for our application
+    :return:
+    """
     return logging.getLogger(LOGGER_NAME)

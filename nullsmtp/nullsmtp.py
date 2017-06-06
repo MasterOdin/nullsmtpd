@@ -120,7 +120,8 @@ def main():
     try:
         smtp_server = NullSMTP((args.host, args.port), args.mail_dir, output_messages)
     except socket.error:
-        logger.error("Could not connect to {}:{}, socket in use.".format(args.host, args.port))
+        msg = "Could not connect to {}:{}, socket in use.".format(args.host, args.port)
+        logger.error(msg)
         raise SystemExit
     # noinspection PyBroadException
     # pylint: disable=bare-except

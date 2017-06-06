@@ -8,6 +8,7 @@ from nullsmtp import __author__, __version__
 
 # If we're not running as root, or the /etc/init.d folder doesn't exist, don't bother copying
 # in our services file for NullSMTP
+# pylint: disable=invalid-name
 if pwd.getpwnam("root").pw_uid != os.getuid() or not os.path.isdir(os.path.join("etc", "init.d")):
     data_files = []
 else:
