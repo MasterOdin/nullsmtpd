@@ -1,6 +1,10 @@
 nullsmtp
 ========
 
+.. image:: https://travis-ci.org/MasterOdin/nullsmtp.svg?branch=master
+    :target: https://travis-ci.org/MasterOdin/nullsmtp
+    :alt: Build Status
+
 nullsmtp is a fake SMTP server (written in python) which can be used for development. The server catches incoming mail,
 writes them to a file, and doesn't actually send it out to the intended recipients. All emails are saved to a directory
 (defaults to ``/var/log/nullsmtp``, but can be changed via flag) where each email address sent to gets its own folder
