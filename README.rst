@@ -30,14 +30,19 @@ Usage
 =====
 ::
 
-    usage: nullsmtp [-h] [-H HOST] [-P PORT] [--mail-dir MAIL_DIR]
+    usage: nullsmtp [-h] [--no-fork] [-H HOST] [-P PORT] [--mail-dir MAIL_DIR]
+                    [-v]
 
     optional arguments:
       -h, --help            show this help message and exit
-      -H HOST, --host HOST  Host to listen on (defaults to localhost)
-      -P PORT, --port PORT  Port to listen on (defaults to 22)
-      --mail-dir MAIL_DIR   Location to write email logs (defaults to /var/log/nullsmtp)
-
+      --no-fork             Don't fork and run nullsmtp as a daemon. Additionally,
+                            this willprint all log messages to stdout/stderr and
+                            all emails to stdout.
+      -H HOST, --host HOST  Host to listen on
+      -P PORT, --port PORT  Port to listen on
+      --mail-dir MAIL_DIR   Location to write logs and emails (defaults to
+                            ~/.nullsmtp)
+      -v, --version         show program's version number and exit
 By default, you will need to use sudo as the server wants to bind itself to localhost and port 22.
 However, if you use a different port, then it will not require using sudo. However, note, that if the current running
 user of the script does not have access to create a directory/file within ``/var/log`` or ``/var/log/nullsmtp``, then
@@ -47,11 +52,11 @@ If the mail directory is writeable to, then you should have the following direct
 
     nullsmtp.log
     person1@example.com/
-        person2@example.com.1492024462.msg
-        person2@example.com.1492024232.msg
-        person1@example.com.1493678462.msg
+        1492024232.person2@example.com.msg
+        1492024462.person2@example.com.msg
+        1493678462.person1@example.com.msg
     person2@example.com/
         person1@example.com.1232421423.msg
 
-where ``nullsmtp.log`` is just a system level log file, and then each folder represents a person's "inbox" and inside
+where ``nullsmtp.log`` a log file for the system, and then each folder represents a person's "inbox" and inside
 are messages from someone at a given timestamp (seconds from epoch).
