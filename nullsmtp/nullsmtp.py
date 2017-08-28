@@ -14,7 +14,7 @@ import time
 from .logger import get_logger, configure_logging
 
 __author__ = 'Matthew Peveler'
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __license__ = 'Unlicense (Public Domain)'
 
 NULLSMTP_DIRECTORY = os.path.join(os.path.expanduser("~"), ".nullsmtp")
