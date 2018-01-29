@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 
-LOGGER_NAME = 'nullsmtp'
+LOGGER_NAME = 'nullsmtpd'
 
 
 # pylint: disable=too-few-public-methods
@@ -29,7 +29,7 @@ def configure_logging(mail_dir, console_logging=False):
     logger = get_logger()
     logger.setLevel(logging.DEBUG)
 
-    file_logger = logging.FileHandler(os.path.join(mail_dir, 'nullsmtp.log'))
+    file_logger = logging.FileHandler(os.path.join(mail_dir, 'nullsmtpd.log'))
     file_logger.setLevel(logging.ERROR)
 
     info_format = "%(asctime)s [%(levelname)-7.7s] %(message)s"

@@ -12,12 +12,12 @@ install:
   - rm -rf *.egg-info
 
 script:
-  #- nohup sudo nullsmtp &
-  #- python -c 'import os; os.path.isdir("/var/log/nullsmtp"); os.path.isfile("/var/log/nullsmtp/nullsmtp.log")'
-  #- cat /var/log/nullsmtp/nullsmtp.log
+  #- nohup sudo nullsmtpd &
+  #- python -c 'import os; os.path.isdir("/var/log/nullsmtpd"); os.path.isfile("/var/log/nullsmtpd/nullsmtpd.log")'
+  #- cat /var/log/nullsmtpd/nullsmtpd.log
   - pylint_runner
   #- python -c 'import os; os.system(\'"Hello World!\nHello World!\n\nRegards,\nExample\n.\n\n" | mail -v matt@example.com\')'
-  #- ls -la /var/log/nullsmtp
+  #- ls -la /var/log/nullsmtpd
 
 
 deploy:

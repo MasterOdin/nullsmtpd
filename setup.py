@@ -4,7 +4,7 @@ Setup file for nullsmtp
 import os
 import pwd
 from setuptools import setup
-from nullsmtp import __author__, __version__
+from nullsmtpd import __author__, __version__
 
 # If we're not running as root, or the /etc/init.d folder doesn't exist, don't bother copying
 # in our services file for NullSMTP
@@ -14,9 +14,9 @@ if pwd.getpwnam("root").pw_uid != os.getuid() or not os.path.isdir(os.path.join(
 else:
     data_files = [('/etc/init.d', ['init.d/nullsmtp'])]
 
-setup(name='nullsmtp',
+setup(name='nullsmtpd',
       version=__version__,
-      url='http://github.com/MasterOdin/nullsmtp',
+      url='http://github.com/MasterOdin/nullsmtpd',
       description='Fake SMTP server',
       long_description=open('README.rst').read(),
       author=__author__,
@@ -34,7 +34,8 @@ setup(name='nullsmtp',
       packages=['nullsmtp'],
       entry_points={
           'console_scripts': [
-              'nullsmtp = nullsmtp:main',
+              'nullsmtpd = nullsmtpd:main',
           ]
       },
-      data_files=data_files)
+      data_files=data_files,
+      requires=['aiosmtpd'])

@@ -9,16 +9,16 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-cmd="/usr/local/bin/nullsmtp"
+cmd="/usr/local/bin/nullsmtpd"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
 stdout_log="/var/log/$name/service.log"
 stderr_log="/var/log/$name/service.err"
 
-if ! [ -d /var/log/nullsmtp ]; then
-  mkdir /var/log/nullsmtp
-  chmod 755 /var/log/nullsmtp
+if ! [ -d /var/log/nullsmtpd ]; then
+  mkdir /var/log/nullsmtpd
+  chmod 755 /var/log/nullsmtpd
 fi
 
 get_pid() {
