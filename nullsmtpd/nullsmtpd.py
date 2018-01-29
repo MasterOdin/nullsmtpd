@@ -22,7 +22,8 @@ NULLSMTPD_DIRECTORY = os.path.join(os.path.expanduser("~"), ".nullsmtpd")
 class NullSMTPDHandler(object):
     def __init__(self, logger, mail_dir, output_messages):
         self.logger = logger
-        if mail_dir is None or isinstance(mail_dir, str):
+        if mail_dir is None or not isinstance(mail_dir, str):
+        if mail_dir is None or not isinstance(mail_dir, str):
             msg = "Invalid mail_dir variable: {}".format(mail_dir)
             self.logger.error(msg)
             raise SystemExit(msg)
