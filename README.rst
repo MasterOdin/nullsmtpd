@@ -17,7 +17,7 @@ handle sending mail from your server.
 
 Requirements
 ============
-nullsmtpd relies on Python 3.5+ and just its standard library. Recommended to also have ``pip`` for installation.
+nullsmtpd relies on Python 3.5+ and `aiosmtpd <https://github.com/aio-libs/aiosmtpd>`_. Recommended to also have ``pip`` for installation.
 
 Installation
 ============
