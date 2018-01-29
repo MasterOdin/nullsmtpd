@@ -4,7 +4,7 @@ Setup file for nullsmtp
 import os
 import pwd
 from setuptools import setup
-from nullsmtpd import __author__, __version__
+from nullsmtpd.version import __author__, __version__, __license__
 
 # If we're not running as root, or the /etc/init.d folder doesn't exist, don't bother copying
 # in our services file for NullSMTP
@@ -38,4 +38,5 @@ setup(name='nullsmtpd',
           ]
       },
       data_files=data_files,
-      requires=['aiosmtpd'])
+      requires=['aiosmtpd']
+)

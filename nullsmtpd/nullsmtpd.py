@@ -11,10 +11,7 @@ import time
 from aiosmtpd.controller import Controller
 
 from .logger import configure_logging
-
-__author__ = 'Matthew Peveler'
-__version__ = '0.4.0'
-__license__ = 'Unlicense (Public Domain)'
+from .version import __author__, __version__, __license__
 
 NULLSMTPD_DIRECTORY = os.path.join(os.path.expanduser("~"), ".nullsmtpd")
 
