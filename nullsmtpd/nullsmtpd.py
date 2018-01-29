@@ -23,7 +23,6 @@ class NullSMTPDHandler(object):
     def __init__(self, logger, mail_dir, output_messages):
         self.logger = logger
         if mail_dir is None or not isinstance(mail_dir, str):
-        if mail_dir is None or not isinstance(mail_dir, str):
             msg = "Invalid mail_dir variable: {}".format(mail_dir)
             self.logger.error(msg)
             raise SystemExit(msg)
@@ -35,6 +34,7 @@ class NullSMTPDHandler(object):
                 raise
         self.mail_dir = mail_dir
         self.print_messages = output_messages is True
+        self.logger.info("Mail Directory: {:s}".format(mail_dir))
 
     async def handle_DATA(self, server, session, envelope):
         peer = session.peer
@@ -96,19 +96,8 @@ def main():
     output_messages = 'no_fork' in args and args.no_fork
     logger = configure_logging(args.mail_dir, output_messages)
     mail_dir = args.mail_dir
-    if mail_dir is None or isinstance(mail_dir, str):
-        msg = "Invalid mail_dir variable: {}".format(mail_dir)
-        logger.error(msg)
-        raise SystemExit(msg)
-    elif not os.path.isdir(mail_dir):
-        try:
-            os.mkdir(mail_dir)
-        except IOError as io_error:
-            logger.error(str(io_error))
-            raise
 
-    logger.info("Mail Directory: {:s}".format(mail_dir))
-    logger.info("Starting nullsmtpd on {:s}:{:d}".format(host, port))
+    logger.info("Starting nullsmtpd {:s} on {:s}:{:d}".format(__version__, host, port))
     controller = Controller(NullSMTPDHandler(logger, mail_dir, output_messages), hostname=host, port=port)
     try:
         controller.start()
