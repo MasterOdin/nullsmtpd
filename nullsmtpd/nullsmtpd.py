@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-NullSMTP module that allows to run a mock email server that just logs all incoming emails to a file
+NullSMTPD module that allows to run a mock email server that just logs all incoming emails to a file
 instead of actually trying to send them. Helps for developing applications that utilize email,
 without spamming customers' emails and not having overhead from some GUI program.
 """
@@ -11,13 +11,27 @@ import time
 from aiosmtpd.controller import Controller
 
 from .logger import configure_logging
-from .version import __author__, __version__, __license__
+from .version import __version__
 
 NULLSMTPD_DIRECTORY = os.path.join(os.path.expanduser("~"), ".nullsmtpd")
 
 
+# pylint: disable=too-few-public-methods
 class NullSMTPDHandler(object):
-    def __init__(self, logger, mail_dir, output_messages):
+    """
+    Handler for aiosmtpd module. This handler upon receiving a message will write the message
+    to a file (as well as potentially logging the message if output_messages is True) instead
+    of actually trying to send them anywhere. Useful for development of local systems being
+    built in Vagrant/Docker and that we don't have a proper domain for and we don't really
+    care to real all emails via a web interface.
+    """
+    def __init__(self, logger, mail_dir, output_messages=True):
+        """
+
+        :param logger: Logger to use for the handler
+        :param mail_dir: Directory to write emails to
+        :param output_messages: Boolean flag on whether to output messages to the logger
+        """
         self.logger = logger
         if mail_dir is None or not isinstance(mail_dir, str):
             msg = "Invalid mail_dir variable: {}".format(mail_dir)
@@ -33,8 +47,20 @@ class NullSMTPDHandler(object):
         self.print_messages = output_messages is True
         self.logger.info("Mail Directory: {:s}".format(mail_dir))
 
-    async def handle_DATA(self, server, session, envelope):
-        peer = session.peer
+    # pylint: disable=invalid-name
+    async def handle_DATA(self, _, __, envelope):
+        """
+        Process incoming email messages as they're received by the server. We take all messages
+        and log them to a file in the directory (mailbox) pertaining to the recipient and then
+        we save the file with {seconds from epoch}.{mailfrom}.msg so that the messages
+        are self-organizing.
+
+        :param _: server
+        :param __: session
+        :param envelope: Object containing details about the email (from, receiptents, messag)
+        :return: string status code of server
+        """
+        # peer = session.peer
         mail_from = envelope.mail_from
         rcpt_tos = envelope.rcpt_tos
         data = envelope.content.decode('utf-8')
@@ -95,7 +121,8 @@ def main():
     mail_dir = args.mail_dir
 
     logger.info("Starting nullsmtpd {:s} on {:s}:{:d}".format(__version__, host, port))
-    controller = Controller(NullSMTPDHandler(logger, mail_dir, output_messages), hostname=host, port=port)
+    controller = Controller(NullSMTPDHandler(logger, mail_dir, output_messages), hostname=host,
+                            port=port)
     try:
         controller.start()
         if output_messages:
