@@ -41,5 +41,5 @@ setup(name='nullsmtpd',
               'nullsmtpd = nullsmtpd.nullsmtpd:main',
           ]
       },
-#      data_files=data_files,
+      # data_files=data_files,
       install_requires=['aiosmtpd'])
