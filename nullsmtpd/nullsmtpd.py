@@ -17,7 +17,7 @@ NULLSMTPD_DIRECTORY = os.path.join(os.path.expanduser("~"), ".nullsmtpd")
 
 
 # pylint: disable=too-few-public-methods
-class NullSMTPDHandler(object):
+class NullSMTPDHandler:
     """
     Handler for aiosmtpd module. This handler upon receiving a message will write the message
     to a file (as well as potentially logging the message if output_messages is True) instead
@@ -37,7 +37,7 @@ class NullSMTPDHandler(object):
             msg = "Invalid mail_dir variable: {}".format(mail_dir)
             self.logger.error(msg)
             raise SystemExit(msg)
-        elif not os.path.isdir(mail_dir):
+        if not os.path.isdir(mail_dir):
             try:
                 os.mkdir(mail_dir)
             except IOError as io_error:
@@ -111,8 +111,8 @@ def main():
 
     if args.no_fork is not True:
         pid = os.fork()
-        if pid is not 0:
-            raise SystemExit()
+        if pid != 0:
+            raise SystemExit("Could not fork nullsmtpd")
 
     host = args.host
     port = args.port
