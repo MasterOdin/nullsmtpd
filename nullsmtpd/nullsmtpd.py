@@ -135,7 +135,7 @@ def main():
 
     try:
         loop.run_forever()
-    except (KeyboardInterrupt):
+    except KeyboardInterrupt:
         pass
     finally:
         logger.info('Stopping nullsmtpd')
