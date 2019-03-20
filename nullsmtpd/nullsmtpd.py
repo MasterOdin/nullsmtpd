@@ -5,6 +5,7 @@ instead of actually trying to send them. Helps for developing applications that 
 without spamming customers' emails and not having overhead from some GUI program.
 """
 import argparse
+import asyncio
 import os
 import time
 
@@ -88,7 +89,7 @@ def _parse_args():
     """
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("--no-fork", action="store_true",
-                        help="Don't fork and run nullsmtpd as a daemon. Additionally, this will"
+                        help="Don't fork and run nullsmtpd as a daemon. Additionally, this will "
                              "print all log messages to stdout/stderr and all emails to stdout.")
     parser.add_argument("-H", "--host", type=str, default="localhost",
                         help="Host to listen on (defaults to localhost)")
@@ -120,17 +121,26 @@ def main():
     logger = configure_logging(args.mail_dir, output_messages)
     mail_dir = args.mail_dir
 
-    logger.info("Starting nullsmtpd {:s} on {:s}:{:d}".format(__version__, host, port))
-    controller = Controller(NullSMTPDHandler(logger, mail_dir, output_messages), hostname=host,
-                            port=port)
+    logger.info(
+        "Starting nullsmtpd {:s} on {:s}:{:d}".format(
+            __version__,
+            host,
+            port
+        )
+    )
+    loop = asyncio.get_event_loop()
+    nullsmtpd = NullSMTPDHandler(logger, mail_dir, output_messages)
+    controller = Controller(nullsmtpd, hostname=host, port=port)
+    controller.start()
+
     try:
-        controller.start()
-        if output_messages:
-            input('nullsmtpd running. Press enter to stop server and exit.')
-            raise SystemExit
+        loop.run_forever()
+    except (KeyboardInterrupt):
+        pass
     finally:
         logger.info('Stopping nullsmtpd')
         controller.stop()
+        loop.stop()
 
 
 if __name__ == "__main__":
