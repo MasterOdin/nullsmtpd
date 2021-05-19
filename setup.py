@@ -30,4 +30,4 @@ setup(name='nullsmtpd',
               'nullsmtpd = nullsmtpd.nullsmtpd:main',
           ]
       },
-      install_requires=['aiosmtpd'])
+      install_requires=['aiosmtpd<=1.3'])
