@@ -1,5 +1,5 @@
 nullsmtpd
-========
+=========
 
 .. image:: https://travis-ci.org/MasterOdin/nullsmtpd.svg?branch=master
     :target: https://travis-ci.org/MasterOdin/nullsmtpd
@@ -47,6 +47,7 @@ Usage
       --mail-dir MAIL_DIR   Location to write logs and emails (defaults to
                             ~/.nullsmtpd)
       -v, --version         show program's version number and exit
+
 By default, you will need to use sudo as the server wants to bind itself to localhost and port 22.
 However, if you use a different port, then it will not require using sudo. However, note, that if the current running
 user of the script does not have access to create a directory/file within ``/var/log`` or ``/var/log/nullsmtpd``, then
